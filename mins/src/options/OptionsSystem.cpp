@@ -21,7 +21,11 @@
 #include "OptionsSystem.h"
 #include "utils/Print_Logger.h"
 #include "utils/opencv_yaml_parse.h"
+#if ROS_AVAILABLE == 1
+#include <ros/package.h>
+#elif ROS_AVAILABLE == 2
 #include <ament_index_cpp/get_package_share_directory.hpp>
+#endif
 
 void mins::OptionsSystem::load_print(const std::shared_ptr<ov_core::YamlParser> &parser) {
   if (parser != nullptr) {
@@ -42,7 +46,11 @@ void mins::OptionsSystem::load_print(const std::shared_ptr<ov_core::YamlParser> 
     parser->parse_external(f, "sys", "bag_durr", bag_durr);
     parser->parse_external(f, "sys", "path_gt", path_gt, false);
     // Replace MINS_DIR if we have it
+#if ROS_AVAILABLE == 1
+    auto dir = ros::package::getPath("mins");
+#elif ROS_AVAILABLE == 2
     auto dir = ament_index_cpp::get_package_share_directory("mins");
+#endif
     path_timing.substr(0, 8) == "MINS_DIR" ? path_timing.replace(0, 8, dir) : std::string();
     path_state.substr(0, 8) == "MINS_DIR" ? path_state.replace(0, 8, dir) : std::string();
     path_trajectory.substr(0, 8) == "MINS_DIR" ? path_trajectory.replace(0, 8, dir) : std::string();

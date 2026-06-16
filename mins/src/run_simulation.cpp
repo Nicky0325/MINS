@@ -33,6 +33,7 @@
 #include <rclcpp/rclcpp.hpp>
 #elif ROS_AVAILABLE == 1
 #include "core/ROSPublisher.h"
+#include "sim/SimVisualizer.h"
 #endif
 #include "core/SystemManager.h"
 #include "options/Options.h"
@@ -67,6 +68,9 @@ shared_ptr<SystemManager> sys;
 #if ROS_AVAILABLE == 2
 shared_ptr<ROS2Publisher> pub;
 shared_ptr<Sim2Visualizer> sim_viz;
+#elif ROS_AVAILABLE == 1
+shared_ptr<ROSPublisher> pub;
+shared_ptr<SimVisualizer> sim_viz;
 #endif
 shared_ptr<Options> op;
 shared_ptr<State_Logger> save;
@@ -157,12 +161,18 @@ void system_setup(int argc, char **argv) {
   auto node = std::make_shared<rclcpp::Node>("mins_simulation");
 
   node->get_parameter<std::string>("config_path", config_path);
+#elif ROS_AVAILABLE == 1
+  ros::init(argc, argv, "mins_simulation");
+  auto nh = make_shared<ros::NodeHandle>("~");
+  nh->param<string>("config_path", config_path, config_path);
 #endif
   // Load the config
   auto parser = make_shared<ov_core::YamlParser>(config_path);
 
 #if ROS_AVAILABLE == 2
   parser->set_node(node);
+#elif ROS_AVAILABLE == 1
+  parser->set_node_handler(nh);
 #endif
   op = make_shared<Options>();
   op->load_print(parser);
@@ -175,6 +185,9 @@ void system_setup(int argc, char **argv) {
 #if ROS_AVAILABLE == 2
   pub = make_shared<ROS2Publisher>(node, sys, op);
   sim_viz = make_shared<Sim2Visualizer>(node, sys, sim);
+#elif ROS_AVAILABLE == 1
+  pub = make_shared<ROSPublisher>(nh, sys, op);
+  sim_viz = make_shared<SimVisualizer>(nh, sys, sim);
 #endif
 
   // Ensure we read in all parameters required
