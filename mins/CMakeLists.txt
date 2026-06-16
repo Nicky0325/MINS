@@ -12,6 +12,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Suppress unnecessary warnings: https://github.com/PointCloudLibrary/pcl/issues/3680
 set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS 1 CACHE INTERNAL "No dev warnings")
 
+# Enable compile optimizations
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -fno-signed-zeros -fno-math-errno -funroll-loops")
+
+# Enable debug flags (use if you want to debug in gdb)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wuninitialized -Wmaybe-uninitialized -fno-omit-frame-pointer")
+
 # Include libraries (if we don't have opencv 4, then fallback to opencv 3)
 # The OpenCV version needs to match the one used by cv_bridge otherwise you will get a segmentation fault!
 find_package(Eigen3 REQUIRED QUIET)
@@ -20,7 +26,6 @@ if (NOT OpenCV_FOUND)
     find_package(OpenCV 3 REQUIRED QUIET)
 endif ()
 find_package(Boost REQUIRED QUIET COMPONENTS system filesystem thread date_time program_options chrono)
-find_package(PCL REQUIRED QUIET)
 find_package(libpointmatcher REQUIRED QUIET)
 find_package(libnabo REQUIRED QUIET)
 
