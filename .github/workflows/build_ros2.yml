@@ -1,0 +1,17 @@
+name: ROS 2 Workflow
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build_humble:
+    name: "ROS2 Ubuntu 22.04"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image (Humble 22.04)
+        run: docker build . --file Dockerfile_humble_22_04 --tag mins:humble
