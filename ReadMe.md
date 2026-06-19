@@ -80,7 +80,10 @@ Here are the rosbag files and ground truths we used in the evaluation. To be spe
 
 We provide mirrors of the converted rosbags (`urban18`-`urban39`) and their ground truths at the links below:
 * [Hugging Face - kaist-urban-dataset](https://huggingface.co/datasets/gladiator7737/kaist-urban-dataset)
-* [UD Robots NAS](https://udrobots.us5.quickconnect.to/?launchApp=SYNO.SDS.App.FileStation3.Instance&launchParam=openfile%3D%252Fhome%252Fkaist%252F&SynoToken=6WeBuboVaPD0I)
+* [UD Robots NAS](https://gofile.me/7B392/kNl7XHqHx) (scan the QR code below)
+
+![KAIST dataset QR code](thirdparty/kaist-QRcode.png)
+
 #### Subscribing to the ros messages
 ```roslaunch mins subscribe.launch config:=euroc_mav rosbag:=V1_03_difficult.bag bag_start_time:=0```
 
