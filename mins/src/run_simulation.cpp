@@ -144,6 +144,10 @@ int main(int argc, char **argv) {
   save->check_files();
 
 #if ROS_AVAILABLE == 2
+  // Release publishers (and the node they hold) while the context is still
+  // valid, otherwise their rcl handles are destroyed after shutdown -> segfault.
+  pub.reset();
+  sim_viz.reset();
   rclcpp::shutdown();
 #endif
   return EXIT_SUCCESS;
@@ -160,6 +164,8 @@ void system_setup(int argc, char **argv) {
 
   auto node = std::make_shared<rclcpp::Node>("mins_simulation");
 
+  // Declare so the value can be supplied either via launch parameter or argv[1].
+  node->declare_parameter<std::string>("config_path", config_path);
   node->get_parameter<std::string>("config_path", config_path);
 #elif ROS_AVAILABLE == 1
   ros::init(argc, argv, "mins_simulation");
