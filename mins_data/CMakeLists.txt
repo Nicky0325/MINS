@@ -11,6 +11,8 @@ if (catkin_FOUND)
     catkin_package()
 elseif (ament_cmake_FOUND)
     message(STATUS "ROS *2* version found")
+    install(DIRECTORY BSplineDataset FloorPlans GroundTruths
+            DESTINATION share/${PROJECT_NAME})
     ament_package()
 else ()
     message(STATUS "No ROS versions found, doing nothing...")
