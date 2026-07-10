@@ -51,6 +51,7 @@ list(APPEND LIBRARY_SOURCES
         src/sim/Simulator.cpp
         src/sim/ConstBsplineSE3.cpp
         src/sim/SimVisualizer.cpp
+        src/utils/PackagePath.cpp
         src/utils/Print_Logger.cpp
         src/utils/Jabdongsani.cpp
         src/state/State.cpp
