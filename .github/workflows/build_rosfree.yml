@@ -17,3 +17,11 @@ jobs:
           submodules: recursive
       - name: Build core + headless CLI with no ROS
         run: docker build . --file Dockerfile_rosfree_ubuntu_22_04 --tag mins:rosfree
+      - name: Run headless CLI (no ROS) end to end
+        run: |
+          docker run --rm -e MINS_ROOT=/work/src/MINS mins:rosfree bash -c '
+            set -eo pipefail
+            mkdir -p /outputs/tmp/0
+            timeout 600 /work/build/mins/mins_cli /work/src/MINS/mins/config/simulation/config.yaml 2>&1 | tee /tmp/cli.log
+            grep -q "RMSE average" /tmp/cli.log
+          '
