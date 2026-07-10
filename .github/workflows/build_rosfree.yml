@@ -1,0 +1,19 @@
+name: ROS-free Workflow
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build_rosfree_linux:
+    name: "No ROS - Ubuntu 22.04"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build core + headless CLI with no ROS
+        run: docker build . --file Dockerfile_rosfree_ubuntu_22_04 --tag mins:rosfree
