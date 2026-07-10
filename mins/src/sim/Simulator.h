@@ -128,6 +128,9 @@ public:
   /// boolean for transforming groundtruth after GPS initialization
   bool trans_gt_to_ENU = false;
 
+  /// Returns RMSE and NEES of IMU pose (ori rmse, pos rmse, ori nees, pos nees)
+  Vector4d imu_rmse_nees(double time, Matrix<double, 7, 1> imu, Matrix<double, 6, 6> cov);
+
 protected:
   friend class Initializer;
   friend class SimVisualizer;
@@ -142,9 +145,6 @@ protected:
 
   /// Returns the true 3d map of camera features
   std::unordered_map<size_t, Vector3d> get_cam_map();
-
-  /// Returns RMSE and NEES of IMU pose (ori rmse, pos rmse, ori nees, pos nees)
-  Vector4d imu_rmse_nees(double time, Matrix<double, 7, 1> imu, Matrix<double, 6, 6> cov);
 
   /// a wrapper function of spline that returns IMU pose & velocities & accelerations
   bool get_imu_acceleration(double timestamp, Matrix3d &R_GtoI, Vector3d &p_IinG, Vector3d &w_IinI, Vector3d &v_IinG, Vector3d &alpha_IinI, Vector3d &a_IinG);
