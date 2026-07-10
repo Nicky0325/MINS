@@ -27,13 +27,9 @@
 
 #include "OptionsSimulation.h"
 #include "OptionsEstimator.h"
+#include "utils/PackagePath.h"
 #include "utils/Print_Logger.h"
 #include "utils/opencv_yaml_parse.h"
-#if ROS_AVAILABLE == 1
-#include <ros/package.h>
-#elif ROS_AVAILABLE == 2
-#include <ament_index_cpp/get_package_share_directory.hpp>
-#endif
 
 mins::OptionsSimulation::OptionsSimulation() { est_true = std::make_shared<OptionsEstimator>(); }
 
@@ -65,12 +61,7 @@ void mins::OptionsSimulation::load_print(const std::shared_ptr<ov_core::YamlPars
     WtoE_trans.block(0, 0, 4, 1) = ov_core::rot_2_quat(T.block(0, 0, 3, 3));
     WtoE_trans.block(4, 0, 3, 1) = T.block(0, 3, 3, 1);
     // Replace MINS_DATA_DIR if we have it
-
-#if ROS_AVAILABLE == 1
-    auto dir = ros::package::getPath("mins_data");
-#elif ROS_AVAILABLE == 2
-    auto dir = ament_index_cpp::get_package_share_directory("mins_data");
-#endif
+    auto dir = mins::get_package_path("mins_data");
     BSpline_path.substr(0, 13) == "MINS_DATA_DIR" ? BSpline_path.replace(0, 13, dir) : std::string();
     planes_path.substr(0, 13) == "MINS_DATA_DIR" ? planes_path.replace(0, 13, dir) : std::string();
 
