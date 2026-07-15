@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MINS: build",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "source /opt/ros/${env:ROS_DISTRO}/setup.bash && if [ \"${env:ROS_DISTRO}\" = \"humble\" ]; then bash ${workspaceFolder}/build_ros2.sh; else catkin build --workspace /workspaces; fi"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "MINS: clean build",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "source /opt/ros/${env:ROS_DISTRO}/setup.bash && if [ \"${env:ROS_DISTRO}\" = \"humble\" ]; then rm -rf /workspaces/build /workspaces/install /workspaces/log && bash ${workspaceFolder}/build_ros2.sh; else catkin clean --yes --workspace /workspaces && catkin build --workspace /workspaces; fi"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "MINS: headless simulation smoke test",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "source /opt/ros/${env:ROS_DISTRO}/setup.bash && if [ \"${env:ROS_DISTRO}\" = \"humble\" ]; then source /workspaces/install/setup.bash && cfg=/workspaces/install/mins/share/mins/config/simulation/config.yaml && timeout 600 ros2 run mins simulation \"$cfg\"; else source /workspaces/devel/setup.bash && mkdir -p /tmp/mins-simulation && timeout 600 roslaunch mins simulation.launch sys_verbosity:=3 sys_path_state:=/tmp/mins-simulation/0/ sys_path_timing:=/tmp/mins-simulation/0.time sys_path_trajectory:=/tmp/mins-simulation/0.txt; fi"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

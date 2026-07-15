@@ -64,6 +64,25 @@ cd .. && catkin build
 source devel/setup.bash
 ```
 
+## VS Code Dev Containers
+
+The repository provides selectable development containers for ROS 1 Noetic and
+ROS 2 Humble. Install Docker and the VS Code **Dev Containers** extension, open
+the repository, then run **Dev Containers: Reopen in Container**. Select either
+`MINS - ROS 1 Noetic` or `MINS - ROS 2 Humble` when VS Code presents the
+available configurations.
+
+The repository is mounted live at `/workspaces/src/MINS`. The selected
+configuration builds the workspace after creation, and source changes can be
+rebuilt with **Terminal: Run Task** → **MINS: build**. The clean rebuild and
+headless simulation smoke-test tasks are available there as well.
+
+The dev-container verification path is intentionally headless. RViz/RViz2,
+camera and LiDAR devices, serial devices, and host-network configuration are
+not enabled by default; those require host-specific display or device
+forwarding settings. The Noetic smoke task stores generated simulation output
+under `/tmp/mins-simulation` so it works with the container's non-root user.
+
 ## Run Examples
 ### Simulation 
 ```roslaunch mins simulation.launch cam_enabled:=true lidar_enabled:=true```
